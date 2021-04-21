@@ -1,0 +1,30 @@
+--- tarsnaps.sh
++++ tarsnaps.sh
+@@ -25,8 +25,9 @@
+ backupday_weekly=Sun	# +%a
+ backupday_monthly=01	# +%d
+ 
++epoch=$(date "+%s")
+ datefmt='%Y-%m-%d-%Hh%M'
+-datetime=$(date "+${datefmt}")
++datetime=$(date -d @${epoch} "+${datefmt}")
+ 
+ die()
+ {
+@@ -136,14 +137,14 @@
+ fi
+ 
+ if [ "${archivemax_weekly}" -gt 0 ]; then
+-	dayofweek=$(date -j -f ${datefmt} ${datetime} "+%a")
++	dayofweek=$(date -d @${epoch} "+%a")
+ 	if [ "${dayofweek}" = "${backupday_weekly}" ]; then
+ 		backup weekly "${targets}"
+ 	fi
+ fi
+ 
+ if [ "${archivemax_monthly}" -gt 0 ]; then
+-	dayofmonth=$(date -j -f ${datefmt} ${datetime} "+%d")
++	dayofmonth=$(date -d @${epoch} "+%d")
+ 	if [ "${dayofmonth}" = "${backupday_monthly}" ]; then
+ 		backup monthly "${targets}"
+ 	fi
