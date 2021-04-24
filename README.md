@@ -73,11 +73,11 @@ entries of a daily backup.
 
 Keep 10 daily, 6 weekly and 12 monthly archives.
 
-	0 22 * * * /bin/sh /usr/local/bin/tarsnaps -d 10 -w 6 -m 12 /home
+	0 22 * * * /usr/local/bin/tarsnaps -d 10 -w 6 -m 12 /home
 
 Keep 28 daily, no weekly and all monthly archives.
 
-	0 22 * * * /bin/sh /usr/local/bin/tarsnaps -d 28 -w 0 /home
+	0 22 * * * /usr/local/bin/tarsnaps -d 28 -w 0 /home
 
 ### SEE ALSO
 
