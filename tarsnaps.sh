@@ -54,8 +54,8 @@ prune()
 	local _archive _policy=$1 _prunecount=$2 _prunelist
 
 	echo "${archives}" \
-	  | sort -r \
 	  | grep ${_policy} \
+	  | sort -r \
 	  | tail -n ${_prunecount} \
 	  | while read -r _prunelist; do
 		for _archive in ${_prunelist}; do
