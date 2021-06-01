@@ -62,7 +62,6 @@ prune()
 
 	if [ "${_archivecount}" -gt "${_archivemax}" ]; then
 		_prunecount=$((_archivecount - _archivemax))
-
 		echo "${_archives}" \
 		  | sort -r \
 		  | tail -n ${_prunecount} \
@@ -166,7 +165,6 @@ if [ -n "${archives}" ]; then
 		weekly)		archivemax=${archivemax_weekly} ;;
 		monthly)	archivemax=${archivemax_monthly} ;;
 		esac
-
 		prune ${policy} ${archivemax}
 	done
 fi
