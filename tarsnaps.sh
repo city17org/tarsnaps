@@ -14,7 +14,7 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE
 
-__version=0.4
+__version=0.5
 
 archivelimit=32767
 
@@ -27,6 +27,9 @@ backupday_monthly=01	# +%d
 
 datefmt='%Y-%m-%d-%Hh%M'
 datetime=$(date "+${datefmt}")
+
+# crontab(5) may define a restricted PATH
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
 
 die()
 {
@@ -51,17 +54,24 @@ backup()
 
 prune()
 {
-	local _archive _policy=$1 _prunecount=$2 _prunelist
+	local _archive _archives _archivecount _archivemax=$2
+	local _policy=$1 _prunecount _prunelist
 
-	echo "${archives}" \
-	  | grep ${_policy} \
-	  | sort -r \
-	  | tail -n ${_prunecount} \
-	  | while read -r _prunelist; do
-		for _archive in ${_prunelist}; do
-			tarsnap -d -f ${_archive} || exit 1
+	_archives=$(echo "${archives}" | grep -- "^$(hostname)-.*-${_policy}$")
+	_archivecount=$(echo "${_archives}" | wc -l)
+
+	if [ "${_archivecount}" -gt "${_archivemax}" ]; then
+		_prunecount=$((_archivecount - _archivemax))
+
+		echo "${_archives}" \
+		  | sort -r \
+		  | tail -n ${_prunecount} \
+		  | while read -r _prunelist; do
+			for _archive in ${_prunelist}; do
+				tarsnap -d -f ${_archive} || exit 1
+			done
 		done
-	done
+	fi
 }
 
 unsignedint()
@@ -92,7 +102,6 @@ stripzeros()
 	echo "${_num:-0}"
 }
 
-PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
 if ! command -v tarsnap >/dev/null; then
 	die "${0##*/}: tarsnap: command not found"
 fi
@@ -158,10 +167,6 @@ if [ -n "${archives}" ]; then
 		monthly)	archivemax=${archivemax_monthly} ;;
 		esac
 
-		archivecount=$(echo "${archives}" | grep -c ${policy})
-		if [ "${archivecount}" -gt "${archivemax}" ]; then
-			prunecount=$((archivecount - archivemax))
-			prune ${policy} ${prunecount}
-		fi
+		prune ${policy} ${archivemax}
 	done
 fi

@@ -4,19 +4,19 @@
  backupday_weekly=Sun	# +%a
  backupday_monthly=01	# +%d
  
-+epoch=$(date "+%s")
++timestamp=$(date "+%s")
  datefmt='%Y-%m-%d-%Hh%M'
 -datetime=$(date "+${datefmt}")
-+datetime=$(date -d @${epoch} "+${datefmt}")
++datetime=$(date -d @${timestamp} "+${datefmt}")
  
- die()
- {
-@@ -136,14 +137,14 @@
+ # crontab(5) may define a restricted PATH
+ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
+@@ -145,14 +146,14 @@
  fi
  
  if [ "${archivemax_weekly}" -gt 0 ]; then
 -	dayofweek=$(date -j -f ${datefmt} ${datetime} "+%a")
-+	dayofweek=$(date -d @${epoch} "+%a")
++	dayofweek=$(date -d @${timestamp} "+%a")
  	if [ "${dayofweek}" = "${backupday_weekly}" ]; then
  		backup weekly "${targets}"
  	fi
@@ -24,7 +24,7 @@
  
  if [ "${archivemax_monthly}" -gt 0 ]; then
 -	dayofmonth=$(date -j -f ${datefmt} ${datetime} "+%d")
-+	dayofmonth=$(date -d @${epoch} "+%d")
++	dayofmonth=$(date -d @${timestamp} "+%d")
  	if [ "${dayofmonth}" = "${backupday_monthly}" ]; then
  		backup monthly "${targets}"
  	fi
