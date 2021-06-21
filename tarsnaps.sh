@@ -14,7 +14,7 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE
 
-__version=0.5
+__version=0.6
 
 archivelimit=32767
 
@@ -101,10 +101,6 @@ stripzeros()
 	echo "${_num:-0}"
 }
 
-if ! command -v tarsnap >/dev/null; then
-	die "${0##*/}: tarsnap: command not found"
-fi
-
 while getopts "d:m:vw:" arg; do
 	case ${arg} in
 	d)	unsignedint $OPTARG
@@ -138,6 +134,10 @@ for target in ${targets:-}; do
 		die "${0##*/}: ${target}: no such file or directory"
 	fi
 done
+
+if ! command -v tarsnap >/dev/null; then
+	die "${0##*/}: tarsnap: command not found"
+fi
 
 if [ "${archivemax_daily}" -gt 0 ]; then
 	backup daily "${targets}"

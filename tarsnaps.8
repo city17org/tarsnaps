@@ -52,8 +52,9 @@ if not defined then all archives are retained.
 If
 .Ar max
 is defined as
-.Ar 0
-then the backup is not taken and any stored archives are removed.
+.Cm 0
+then the backup, if applicable, is not taken and any stored archives
+removed.
 .Pp
 The options are as follows:
 .Bl -tag -width Ds
@@ -75,12 +76,12 @@ entries of a daily backup.
 .Pp
 Keep 10 daily, 6 weekly and 12 monthly archives.
 .Bd -literal -offset indent
-0 22 * * * /usr/local/bin/tarsnaps -d 10 -w 6 -m 12 /home
+0 22 * * * /usr/local/bin/tarsnaps -d 10 -w 6 -m 12 /etc /home
 .Ed
 .Pp
 Keep 28 daily, no weekly and all monthly archives.
 .Bd -literal -offset indent
-0 22 * * * /usr/local/bin/tarsnaps -d 28 -w 0 /home
+0 22 * * * /usr/local/bin/tarsnaps -d 28 -w 0 /etc /home
 .Ed
 .Sh SEE ALSO
 .Xr tarsnap 1 ,
@@ -90,7 +91,7 @@ Keep 28 daily, no weekly and all monthly archives.
 .Sh AUTHORS
 .An Sean Davies Aq Mt sean@city17.org
 .Sh CAVEATS
-The backup policy names are arbitrary and should be viewed as retention
-points, if the utility is run more than once in a day then another daily
-archive will be created.
-The same applies to weekly or monthly backups.
+.Nm
+assumes it is only being run once per host.
+All items to be backed up should be included in the same job, as it will not
+distinguish between archives created with different input.

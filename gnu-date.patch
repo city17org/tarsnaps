@@ -11,7 +11,7 @@
  
  # crontab(5) may define a restricted PATH
  PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
-@@ -145,14 +146,14 @@
+@@ -144,14 +145,14 @@
  fi
  
  if [ "${archivemax_weekly}" -gt 0 ]; then
