@@ -12,8 +12,8 @@ clean:
 	rm -f $(BIN)
 
 install: $(BIN)
-	install -m0755 $(BIN) $(BINDIR)/$(BIN)
-	install -m0644 $(MAN) $(MANDIR)/
+	install -m0755 $(BIN) $(BINDIR)
+	install -m0644 $(MAN) $(MANDIR)
 
 uninstall:
 	rm -f $(BINDIR)/$(BIN)
