@@ -1,0 +1,17 @@
+--- tarsnaps.sh.orig	2022-03-24 07:46:13.210760000 +0800
++++ tarsnaps.sh	2022-03-24 07:46:13.217055000 +0800
+@@ -28,10 +28,11 @@
+ backupday_weekly=Sun # +%a
+ backupday_monthly=01 # +%d
+ 
++timestamp=$(date "+%s")
+ datefmt=%Y-%m-%d-%Hh%M
+-datetime=$(date "+${datefmt}")
+-dayofweek=$(date -j -f "${datefmt}" "${datetime}" "+%a")
+-dayofmonth=$(date -j -f "${datefmt}" "${datetime}" "+%d")
++datetime=$(date -d "@${timestamp}" "+${datefmt}")
++dayofweek=$(date -d "@${timestamp}" "+%a")
++dayofmonth=$(date -d "@${timestamp}" "+%d")
+ 
+ die()
+ {
