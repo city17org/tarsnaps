@@ -1,5 +1,5 @@
---- tarsnaps.sh.orig	2022-03-24 07:46:13.210760000 +0800
-+++ tarsnaps.sh	2022-03-24 07:46:13.217055000 +0800
+--- tarsnaps.sh
++++ tarsnaps.sh
 @@ -28,10 +28,11 @@
  backupday_weekly=Sun # +%a
  backupday_monthly=01 # +%d
