@@ -29,12 +29,12 @@
 .Nm
 is a utility that is designed to be run once a day from
 .Xr cron 8
-and will create a
+and creates a
 .Xr tarsnap 1
 backup of the files or directories passed as
 .Ar target .
-Weekly and monthly archives will be created automatically when a daily backup
-is taken and the day matches a
+Weekly and monthly archives are created automatically when a daily backup is
+taken, and the day matches a
 .Em Sunday
 or the
 .Em 1st
@@ -43,27 +43,27 @@ of the month, respectively.
 The maximum number of stored archives can be set individually for the daily,
 weekly, and monthly backups by specifying the
 .Ar max
-value.
-If the number of stored archives exceeds this value then the oldest are
-removed first.
+value for each.
+Once the number of stored archives exceeds this value the oldest are deleted
+first.
 .Pp
 If
 .Ar max
-if not defined then all archives are retained.
+if not defined, then all archives are stored.
 If
 .Ar max
 is defined as
 .Cm 0
 then the backup, if applicable, is not taken and any stored archives
-removed.
+are deleted.
 If all values for
 .Ar max
 are defined as
 .Cm 0
 then all archives created by
 .Nm
-will be removed, the user will be prompted to confirm this action before
-proceeding.
+are deleted, the user is prompted to confirm this action before
+continuing.
 .Pp
 The options are as follows:
 .Bl -tag -width Ds

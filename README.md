@@ -17,12 +17,12 @@ TARSNAPS(8) - System Manager's Manual
 **tarsnaps**
 is a utility that is designed to be run once a day from
 cron(8)
-and will create a
+and creates a
 tarsnap(1)
 backup of the files or directories passed as
 *target*.
-Weekly and monthly archives will be created automatically when a daily backup
-is taken and the day matches a
+Weekly and monthly archives are created automatically when a daily backup is
+taken, and the day matches a
 *Sunday*
 or the
 *1st*
@@ -31,27 +31,27 @@ of the month, respectively.
 The maximum number of stored archives can be set individually for the daily,
 weekly, and monthly backups by specifying the
 *max*
-value.
-If the number of stored archives exceeds this value then the oldest are
-removed first.
+value for each.
+Once the number of stored archives exceeds this value the oldest are deleted
+first.
 
 If
 *max*
-if not defined then all archives are retained.
+if not defined, then all archives are stored.
 If
 *max*
 is defined as
 **0**
 then the backup, if applicable, is not taken and any stored archives
-removed.
+are deleted.
 If all values for
 *max*
 are defined as
 **0**
 then all archives created by
 **tarsnaps**
-will be removed, the user will be prompted to confirm this action before
-proceeding.
+are deleted, the user is prompted to confirm this action before
+continuing.
 
 The options are as follows:
 
