@@ -130,14 +130,15 @@ for max in ${archivemax_daily} ${archivemax_weekly} ${archivemax_monthly}; do
 		break
 	fi
 	purge=$((purge + 1))
-	if [ "${purge}" -eq 3 ]; then
-		echo "enter 'NUKE' to continue"
-		IFS= read -r line
-		if [ "${line}" != "NUKE" ]; then
-			die "${0##*/}: incorrect input"
-		fi
-	fi
 done
+
+if [ "${purge}" -eq 3 ]; then
+	echo "enter 'NUKE' to continue"
+	IFS= read -r line
+	if [ "${line}" != "NUKE" ]; then
+		die "${0##*/}: incorrect input"
+	fi
+fi
 
 if ! command -v tarsnap >/dev/null; then
 	die "${0##*/}: tarsnap: command not found"
