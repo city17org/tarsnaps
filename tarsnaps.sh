@@ -21,12 +21,12 @@ __version=0.12
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
 
 archivelimit=99999
-archivemax_daily=${archivelimit}
-archivemax_weekly=${archivelimit}
-archivemax_monthly=${archivelimit}
+maxdailyarchives=${archivelimit}
+maxweeklyarchives=${archivelimit}
+maxmonthlyarchives=${archivelimit}
 
-backupday_weekly=Sun # +%a
-backupday_monthly=01 # +%d
+weeklybackupday=Sun # +%a
+monthlybackupday=01 # +%d
 
 datefmt=%Y-%m-%d-%Hh%M
 datetime=$(date "+${datefmt}")
@@ -71,7 +71,7 @@ backup()
 
 prune()
 {
-	local _archive _archives _archivecount _archivemax="$2"
+	local _archive _archives _archivecount _maxarchives="$2"
 	local _policy="$1" _prunecount _prunelist
 
 	_archives=$(echo "${archives}" | \
@@ -79,8 +79,8 @@ prune()
 	[ -n "${_archives}" ] || return 0
 
 	_archivecount=$(echo "${_archives}" | wc -l)
-	if [ "${_archivecount}" -gt "${_archivemax}" ]; then
-		_prunecount=$((_archivecount - _archivemax))
+	if [ "${_archivecount}" -gt "${_maxarchives}" ]; then
+		_prunecount=$((_archivecount - _maxarchives))
 		echo "${_archives}" | sort -r | tail -n "${_prunecount}" | \
 			while read -r _prunelist; do
 			for _archive in ${_prunelist}; do
@@ -97,14 +97,14 @@ wflag=0
 while getopts d:m:vw: arg; do
 	case ${arg} in
 	d)	[ "${dflag}" -eq 0 ] || usage
-		archivemax_daily=$(verifyarg "${OPTARG}")
+		maxdailyarchives=$(verifyarg "${OPTARG}")
 		dflag=1 ;;
 	m)	[ "${mflag}" -eq 0 ] || usage
-		archivemax_monthly=$(verifyarg "${OPTARG}")
+		maxmonthlyarchives=$(verifyarg "${OPTARG}")
 		mflag=1 ;;
 	v)	vflag=1 ;;
 	w)	[ "${wflag}" -eq 0 ] || usage
-		archivemax_weekly=$(verifyarg "${OPTARG}")
+		maxweeklyarchives=$(verifyarg "${OPTARG}")
 		wflag=1 ;;
 	*)	usage ;;
 	esac
@@ -118,7 +118,7 @@ if [ "${vflag}" -eq 1 ]; then
 fi
 
 purge=0
-for max in ${archivemax_daily} ${archivemax_weekly} ${archivemax_monthly}; do
+for max in ${maxdailyarchives} ${maxweeklyarchives} ${maxmonthlyarchives}; do
 	if [ "${max}" -gt 0 ]; then
 		targets="$*"
 		[ -n "${targets}" ] || usage
@@ -144,18 +144,18 @@ if ! command -v tarsnap >/dev/null; then
 	die "${0##*/}: tarsnap: command not found"
 fi
 
-if [ "${archivemax_daily}" -gt 0 ]; then
+if [ "${maxdailyarchives}" -gt 0 ]; then
 	backup daily
 fi
 
-if [ "${dayofweek}" = "${backupday_weekly}" ]; then
-	if [ "${archivemax_weekly}" -gt 0 ]; then
+if [ "${dayofweek}" = "${weeklybackupday}" ]; then
+	if [ "${maxweeklyarchives}" -gt 0 ]; then
 		backup weekly
 	fi
 fi
 
-if [ "${dayofmonth}" = "${backupday_monthly}" ]; then
-	if [ "${archivemax_monthly}" -gt 0 ]; then
+if [ "${dayofmonth}" = "${monthlybackupday}" ]; then
+	if [ "${maxmonthlyarchives}" -gt 0 ]; then
 		backup monthly
 	fi
 fi
@@ -164,10 +164,10 @@ archives=$(tarsnap --list-archives)
 if [ -n "${archives}" ]; then
 	for policy in daily weekly monthly; do
 		case ${policy} in
-		daily) archivemax=${archivemax_daily} ;;
-		weekly) archivemax=${archivemax_weekly} ;;
-		monthly) archivemax=${archivemax_monthly} ;;
+		daily) maxarchives=${maxdailyarchives} ;;
+		weekly) maxarchives=${maxweeklyarchives} ;;
+		monthly) maxarchives=${maxmonthlyarchives} ;;
 		esac
-		prune "${policy}" "${archivemax}"
+		prune "${policy}" "${maxarchives}"
 	done
 fi

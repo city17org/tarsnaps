@@ -1,8 +1,8 @@
 --- tarsnaps.sh
 +++ tarsnaps.sh
 @@ -28,10 +28,11 @@
- backupday_weekly=Sun # +%a
- backupday_monthly=01 # +%d
+ weeklybackupday=Sun # +%a
+ monthlybackupday=01 # +%d
  
 +timestamp=$(date "+%s")
  datefmt=%Y-%m-%d-%Hh%M
