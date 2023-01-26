@@ -16,7 +16,7 @@
 
 set -e
 
-__version=0.12
+__version=0.13
 
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
 
