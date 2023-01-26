@@ -25,13 +25,9 @@ maxdailyarchives=${archivelimit}
 maxweeklyarchives=${archivelimit}
 maxmonthlyarchives=${archivelimit}
 
+datefmt=%Y-%m-%d-%Hh%M
 weeklybackupday=Sun # +%a
 monthlybackupday=01 # +%d
-
-datefmt=%Y-%m-%d-%Hh%M
-datetime=$(date "+${datefmt}")
-dayofweek=$(date -j -f "${datefmt}" "${datetime}" "+%a")
-dayofmonth=$(date -j -f "${datefmt}" "${datetime}" "+%d")
 
 die()
 {
@@ -139,6 +135,17 @@ if [ "${purge}" -eq 3 ]; then
 		die "${0##*/}: incorrect input"
 	fi
 fi
+
+case $(uname -s) in
+*BSD)	datetime=$(date "+${datefmt}")
+	dayofweek=$(date -j -f "${datefmt}" "${datetime}" "+%a")
+	dayofmonth=$(date -j -f "${datefmt}" "${datetime}" "+%d") ;;
+Linux)	timestamp=$(date "+%s")
+	datetime=$(date -d "@${timestamp}" "+${datefmt}")
+	dayofweek=$(date -d "@${timestamp}" "+%a")
+	dayofmonth=$(date -d "@${timestamp}" "+%d") ;;
+*)	die "${0##*/}: unsupported operating system" ;;
+esac
 
 if ! command -v tarsnap >/dev/null; then
 	die "${0##*/}: tarsnap: command not found"
